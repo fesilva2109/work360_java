@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.project'
+version = '0.0.1-SNAPSHOT'
+description = 'Projeto Global Solution 360Flow'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    // ✅ Repositório necessário para dependências Spring AI
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+    // Dependências para Segurança e JWT
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'com.auth0:java-jwt:4.4.0'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+
+    implementation platform("org.springframework.ai:spring-ai-bom:1.0.0")
+
+    // Use o artefato correto:
+    implementation "org.springframework.ai:spring-ai-starter-model-openai:1.1.0"
+
+    // Se quiser incluir RAG:
+    implementation "org.springframework.ai:spring-ai-rag:1.0.0"
+    // (opcional) vector store
+    implementation "org.springframework.ai:spring-ai-vector-store:1.0.0"
+
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.oracle.database.jdbc:ojdbc11'
+
+    implementation 'com.google.code.gson:gson:2.13.2'
+
+    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
