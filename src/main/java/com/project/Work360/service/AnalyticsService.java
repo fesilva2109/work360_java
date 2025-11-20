@@ -141,7 +141,10 @@ public class AnalyticsService {
                         .reduce((first, second) -> second)
                         .orElse(null);
                 if (inicio != null) {
-                    minutosFoco += Duration.between(inicio, e.getTimestamp()).toMinutes();
+                    // Calcula a duração em segundos para maior precisão.
+                    long segundosDeFoco = Duration.between(inicio, e.getTimestamp()).toSeconds();
+
+                    minutosFoco += (int) Math.ceil((double) segundosDeFoco / 60.0);
                 }
                 inicioFoco.clear(); // fecha sessão
             }

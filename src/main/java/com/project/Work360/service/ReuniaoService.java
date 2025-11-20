@@ -36,6 +36,11 @@ public class ReuniaoService {
         return reuniaoRepository.findAll(pageable).map(reuniaoMapper::toResponse);
     }
 
+    public Page<ReuniaoResponse> findAllByUsuario(Long usuarioId, Pageable pageable) {
+        Page<Reuniao> reunioes = reuniaoRepository.findByUsuarioId(usuarioId, pageable);
+        return reunioes.map(reuniaoMapper::toResponse);
+    }
+
     public ReuniaoResponse findById(Long id) {
         return reuniaoRepository.findById(id).map(reuniaoMapper::toResponse).orElse(null);
     }

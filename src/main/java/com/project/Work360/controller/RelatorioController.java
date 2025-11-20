@@ -38,8 +38,16 @@ public class RelatorioController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
 
-        RelatorioResponse relatorio = relatorioService.gerarRelatorioCompleto(usuarioId, dataInicio, dataFim);
-        return ResponseEntity.status(201).body(relatorio);
+        try {
+            RelatorioResponse relatorio = relatorioService.gerarRelatorioCompleto(usuarioId, dataInicio, dataFim);
+            return ResponseEntity.status(201).body(relatorio);
+        } catch (RuntimeException e) {
+            // Captura a exceção "Sem métricas..." e a transforma em uma resposta 400 Bad Request.
+            if (e.getMessage().contains("Sem métricas para gerar relatório")) {
+                return ResponseEntity.badRequest().build();
+            }
+            throw e; // Se for outra RuntimeException, mantém o comportamento de erro interno (500).
+        }
     }
 
 
@@ -53,9 +61,6 @@ public class RelatorioController {
     @GetMapping("/{usuarioId}")
     public ResponseEntity<List<RelatorioResponse>> listarRelatorios(@PathVariable Long usuarioId) {
         List<RelatorioResponse> relatorios = relatorioService.findByUsuario(usuarioId);
-        if (relatorios.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(relatorios);
     }
 
@@ -72,4 +77,3 @@ public class RelatorioController {
                 : ResponseEntity.notFound().build();
     }
 }
-

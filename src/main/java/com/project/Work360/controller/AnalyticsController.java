@@ -81,6 +81,10 @@ public class AnalyticsController {
         LocalDate hoje = LocalDate.now();
         return analyticsService.findMetricaDoDia(usuarioId, hoje)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseGet(() -> {
+                    AnalyticsMetricaResponse defaultMetrics = new AnalyticsMetricaResponse(
+                            null, usuarioId, hoje, 0, 0, 0, "N/A");
+                    return ResponseEntity.ok(defaultMetrics);
+                });
     }
 }

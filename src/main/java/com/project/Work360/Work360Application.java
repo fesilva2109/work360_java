@@ -12,5 +12,5 @@ public class Work360Application {
 		SpringApplication.run(Work360Application.class, args);
         System.out.println("Bem vindo ao Hub Work360");
 	}
-    // http://localhost:8080/swagger-ui/index.html#/
+    // http://localhost:8080/swagger-ui/index.html
 }

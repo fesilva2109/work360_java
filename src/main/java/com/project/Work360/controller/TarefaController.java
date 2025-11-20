@@ -2,6 +2,7 @@ package com.project.Work360.controller;
 
 import com.project.Work360.dto.TarefaRequest;
 import com.project.Work360.dto.TarefaResponse;
+import com.project.Work360.model.Usuario;
 import com.project.Work360.service.TarefaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,9 +49,13 @@ public class TarefaController {
                             schema = @Schema(implementation = TarefaResponse.class)))
     })
     @GetMapping
-    public ResponseEntity<Page<TarefaResponse>> readAll(@RequestParam(defaultValue = "0") Integer pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("titulo").ascending());
-        return ResponseEntity.ok(tarefaService.findAll(pageable));
+    public ResponseEntity<Page<TarefaResponse>> readAll(
+            @AuthenticationPrincipal Usuario usuario,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("titulo").ascending());
+        return ResponseEntity.ok(tarefaService.findAllByUsuario(usuario.getId(), pageable));
     }
 
     @Operation(summary = "Busca uma tarefa por ID")

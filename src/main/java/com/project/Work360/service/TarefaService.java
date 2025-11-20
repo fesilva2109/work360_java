@@ -36,8 +36,14 @@ public class TarefaService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TarefaResponse> findAll(Pageable pageable) {
-        return tarefaRepository.findAll(pageable).map(tarefaMapper::toResponse);
+    public Page<TarefaResponse> findAllByUsuario(Long usuarioId, Pageable pageable) {
+        Page<Tarefa> tarefas = tarefaRepository.findByUsuarioId(usuarioId, pageable);
+        return tarefas.map(tarefaMapper::toResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TarefaResponse> findAllAdmin(Pageable pageable) { // Renomeado para clareza
+        return tarefaRepository.findAll(pageable).map(tarefaMapper::toResponse); // Este método busca TUDO, ideal para um admin.
     }
 
     @Transactional(readOnly = true)

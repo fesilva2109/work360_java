@@ -3,6 +3,7 @@ package com.project.Work360.controller;
 import com.project.Work360.dto.ReuniaoRequest;
 import com.project.Work360.dto.ReuniaoResponse;
 import com.project.Work360.service.ReuniaoService;
+import com.project.Work360.model.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -46,9 +48,13 @@ public class ReuniaoController {
                             schema = @Schema(implementation = ReuniaoResponse.class)))
     })
     @GetMapping
-    public ResponseEntity<Page<ReuniaoResponse>> readAll(@RequestParam(defaultValue = "0") Integer pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("data").descending());
-        return ResponseEntity.ok(reuniaoService.findAll(pageable));
+    public ResponseEntity<Page<ReuniaoResponse>> readAll(
+            @AuthenticationPrincipal Usuario usuario,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending());
+        return ResponseEntity.ok(reuniaoService.findAllByUsuario(usuario.getId(), pageable));
     }
 
     @Operation(summary = "Busca uma reunião por ID")

@@ -59,7 +59,17 @@ public class SecurityConfiguration {
                         // 🔓 Libera a rota de cadastro de usuário (se houver)
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
 
-                        // 🔓 Libera OPTIONS para CORS
+                        // 🔐 Libera a rota de relatórios para usuários autenticados
+                        .requestMatchers(
+                                "/tarefas/**",
+                                "/reunioes/**",
+                                "/focus/**",
+                                "/analytics/**",
+                                "/relatorios/**", // Permite GET /relatorios/usuario/{id}
+                                "/relatorios/gerar/**"    // Permite POST /relatorios/gerar?usuarioId=...
+                        ).authenticated()
+
+                        // � Libera OPTIONS para CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // 🔐 Todas as outras requisições precisam de autenticação

@@ -66,7 +66,7 @@ public class RelatorioService {
                 .sum();
 
         // Tarefas pendentes
-        int tarefasPendentes = (int) tarefaRepository.findByUsuarioId(usuarioId)
+        int tarefasPendentes = (int) tarefaRepository.findAllByUsuarioId(usuarioId)
                 .stream()
                 .filter(t -> !t.isConcluida())
                 .count();
