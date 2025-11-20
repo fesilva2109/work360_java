@@ -43,6 +43,7 @@ public class Relatorio implements Serializable {
     @Lob
     private String recomendacaoIA;
 
+    @Lob
     private String resumoGeral;
 
     private LocalDateTime criadoEm = LocalDateTime.now();

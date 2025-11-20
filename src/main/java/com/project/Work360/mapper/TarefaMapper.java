@@ -33,7 +33,8 @@ public class TarefaMapper {
                 tarefa.getPrioridade(),
                 tarefa.getEstimativaMinutos(),
                 tarefa.getUsuario().getId(),
-                tarefa.isConcluida() 
+                tarefa.isConcluida(),
+                tarefa.getDataConclusao()
         );
     }
 }

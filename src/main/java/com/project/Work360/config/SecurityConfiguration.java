@@ -1,6 +1,9 @@
 package com.project.Work360.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Map;
 
 import com.project.Work360.security.SecurityFilter;
 
@@ -42,38 +46,27 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(auth -> auth
-                        // 🔓 Libera Swagger
-                        .requestMatchers(
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/v3/api-docs",
-                                "/swagger-resources/**",
-                                "/webjars/**"
-                        ).permitAll()
-
-
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-
-                        // 🔓 Libera a rota de cadastro de usuário (se houver)
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-
-                        // 🔐 Libera a rota de relatórios para usuários autenticados
-                        .requestMatchers(
-                                "/tarefas/**",
-                                "/reunioes/**",
-                                "/focus/**",
-                                "/analytics/**",
-                                "/relatorios/**", // Permite GET /relatorios/usuario/{id}
-                                "/relatorios/gerar/**"    // Permite POST /relatorios/gerar?usuarioId=...
-                        ).authenticated()
-
-                        // � Libera OPTIONS para CORS
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // 🔐 Todas as outras requisições precisam de autenticação
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> {
+                    auth
+                            // 🔓 Endpoints Públicos
+                            .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                            .requestMatchers(
+                                    "/swagger-ui.html",
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**"
+                            ).permitAll()
+                            // 🔐 Todas as outras requisições exigem autenticação
+                            .anyRequest().authenticated();
+                })
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write(new ObjectMapper().writeValueAsString(
+                                    Map.of("erro", "Acesso não autorizado. Por favor, realize o login.")
+                            ));
+                        })
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -81,7 +74,9 @@ public class SecurityConfiguration {
     @Bean
         public CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("*")); 
+            // 🔒 IMPORTANTE: Em produção, substitua "*" pela URL do seu frontend.
+            // Ex: "http://localhost:3000", "https://meu-app.com"
+            configuration.setAllowedOrigins(Arrays.asList("*"));
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
             

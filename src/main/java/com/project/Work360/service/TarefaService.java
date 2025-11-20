@@ -12,6 +12,7 @@ import com.project.Work360.mapper.TarefaMapper;
 import com.project.Work360.model.Tarefa;
 import com.project.Work360.model.Usuario;
 import com.project.Work360.repository.TarefaRepository; 
+import java.time.LocalDateTime;
 
 @Service
 public class TarefaService {
@@ -66,6 +67,11 @@ public class TarefaService {
         tarefa.setEstimativaMinutos(request.estimativaMinutos());
 
         if (request.concluida() != null) {
+            if (request.concluida() && !tarefa.isConcluida()) {
+                tarefa.setDataConclusao(LocalDateTime.now());
+            } else if (!request.concluida()) {
+                tarefa.setDataConclusao(null);
+            }
             tarefa.setConcluida(request.concluida());
         }
 

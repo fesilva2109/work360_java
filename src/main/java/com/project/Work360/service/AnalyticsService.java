@@ -67,6 +67,7 @@ public class AnalyticsService {
 
         if (tarefa != null && evento.getTipoEvento() == TipoEvento.TAREFA_CONCLUIDA) {
             tarefa.setConcluida(true);
+            tarefa.setDataConclusao(LocalDateTime.now());
             tarefaRepository.save(tarefa);
             System.out.println("Tarefa marcada como concluída: " + tarefa.getTitulo());
         }

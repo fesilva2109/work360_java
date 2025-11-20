@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -21,10 +23,12 @@ public class AnalyticsEvento implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "tarefa_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Tarefa tarefa;
 
     @ManyToOne
     @JoinColumn(name = "reuniao_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Reuniao reuniao;
 
     @Enumerated(EnumType.STRING)

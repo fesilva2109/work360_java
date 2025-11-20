@@ -1,6 +1,7 @@
 package com.project.Work360.model;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tarefas")
@@ -28,6 +29,10 @@ public class Tarefa implements Serializable {
     private Integer estimativaMinutos;
 
     private boolean concluida = false;
+
+    private LocalDateTime dataConclusao;
+
+    private LocalDateTime criadoEm = LocalDateTime.now();
 
     public Long getId() {
         return id;
@@ -82,5 +87,29 @@ public class Tarefa implements Serializable {
 
     public void setEstimativaMinutos(Integer estimativaMinutos) {
         this.estimativaMinutos = estimativaMinutos;
+    }
+
+    public LocalDateTime getDataConclusao() {
+        return dataConclusao;
+    }
+
+    public void setDataConclusao(LocalDateTime dataConclusao) {
+        this.dataConclusao = dataConclusao;
+    }
+
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
+    @Override
+    public String toString() {
+        return "Tarefa{" + "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", concluida=" + concluida +
+                ", dataConclusao=" + dataConclusao + '}';
     }
 }

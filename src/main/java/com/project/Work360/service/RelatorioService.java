@@ -51,10 +51,9 @@ public class RelatorioService {
             throw new RuntimeException("Sem métricas para gerar relatório.");
         }
 
-        // Somatórios básicos
-        int totalTarefasConcluidas = metricas.stream()
-                .mapToInt(m -> m.getTarefasConcluidasNoDia() != null ? m.getTarefasConcluidasNoDia() : 0)
-                .sum();
+        // Contagem de tarefas concluídas no período
+        int totalTarefasConcluidas = (int) tarefaRepository.countByUsuarioIdAndDataConclusaoBetween(
+                usuarioId, dataInicio.atStartOfDay(), dataFim.atTime(23, 59, 59));
 
         int totalMinutosFoco = metricas.stream()
                 .mapToInt(m -> m.getMinutosFoco() != null ? m.getMinutosFoco() : 0)
