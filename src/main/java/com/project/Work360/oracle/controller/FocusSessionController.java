@@ -37,4 +37,16 @@ public class FocusSessionController {
     public ResponseEntity<List<FocusSession>> getHistory(@PathVariable Long usuarioId) {
         return ResponseEntity.ok(service.getHistory(usuarioId));
     }
+    @Operation(summary = "Recebe dados reais/simulados do IoT durante a sessão de foco")
+    @PostMapping("/iot/sensordata")
+    public ResponseEntity<String> receiveSensorData(@RequestBody Map<String, Object> payload) {
+        Long usuarioId = Long.valueOf(payload.get("usuarioId").toString());
+        int bpm = Integer.parseInt(payload.get("batimentosCardiacos").toString());
+        int noise = Integer.parseInt(payload.get("nivelRuidoDB").toString());
+        int segundos = Integer.parseInt(payload.get("tempoFocoSegundos").toString());
+
+        service.updateLiveSensorData(usuarioId, bpm, noise, segundos);
+
+        return ResponseEntity.ok("Dados IoT recebidos com sucesso");
+    }
 }

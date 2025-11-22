@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,7 +17,15 @@ public class FocusSessionService {
 
     @Autowired
     private FocusSessionRepository repository;
+    private Map<Long, Integer> ultimoBpmMap = new HashMap<>();
+    private Map<Long, Integer> ultimoRuidoMap = new HashMap<>();
 
+    public void updateLiveSensorData(Long usuarioId, int bpm, int noiseDb, int tempoFoco) {
+        ultimoBpmMap.put(usuarioId, bpm);
+        ultimoRuidoMap.put(usuarioId, noiseDb);
+
+        System.out.println("IoT => BPM: " + bpm + " | Noise: " + noiseDb + " | TempoFoco: " + tempoFoco);
+    }
     public FocusSession startSession(Long usuarioId) {
         FocusSession session = new FocusSession();
         session.setUsuarioId(usuarioId);
@@ -32,12 +42,16 @@ public class FocusSessionService {
             session.setEndTime(LocalDateTime.now());
             session.setStatus("CONCLUIDO");
 
-  
-            int randomBpm = ThreadLocalRandom.current().nextInt(60, 110); 
-            int randomNoise = ThreadLocalRandom.current().nextInt(30, 80); 
-            
-            session.setAvgBpm(randomBpm);
-            session.setAvgNoiseDb(randomNoise);
+            Long usuarioId = session.getUsuarioId();
+
+            Integer bpm = ultimoBpmMap.getOrDefault(usuarioId,
+                    ThreadLocalRandom.current().nextInt(60, 110));
+
+            Integer noise = ultimoRuidoMap.getOrDefault(usuarioId,
+                    ThreadLocalRandom.current().nextInt(30, 80));
+
+            session.setAvgBpm(bpm);
+            session.setAvgNoiseDb(noise);
 
             return repository.save(session);
         }
