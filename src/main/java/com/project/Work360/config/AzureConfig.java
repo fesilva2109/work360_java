@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
     basePackages = {
         "com.project.Work360.repository", 
-        "com.project.Work360.ai"        
+        "com.project.Work360.ai.rag"
     },
     entityManagerFactoryRef = "azureEntityManagerFactory",
     transactionManagerRef = "azureTransactionManager"
@@ -54,7 +54,7 @@ public class AzureConfig {
                 .dataSource(dataSource)
                 .packages(
                     "com.project.Work360.model",   
-                    "com.project.Work360.ai"   
+                    "com.project.Work360.ai.rag"
                 )
                 .persistenceUnit("azure")
                 .build();

@@ -25,8 +25,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Map;
 
-import com.project.Work360.security.SecurityFilter;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
