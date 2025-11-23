@@ -23,14 +23,6 @@ A API é responsável por:
 
 ---
 
-## 📹 Vídeo de Demonstração
-
-Assista ao vídeo completo da solução Work360 em funcionamento:
-
-**[▶️ Work360 - Apresentação da Solução no YouTube]()**
-
----
-
 ## ✨ Funcionalidades do Backend
 
 Esta API fornece os seguintes endpoints e funcionalidades para o cliente móvel:
