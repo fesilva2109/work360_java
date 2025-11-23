@@ -46,7 +46,6 @@ public class SecurityConfiguration {
                 )
                 .authorizeHttpRequests(auth -> {
                     auth
-                            // 🔓 Endpoints Públicos
                             .requestMatchers(HttpMethod.POST, "/login").permitAll()
                             .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                             .requestMatchers(
@@ -56,7 +55,6 @@ public class SecurityConfiguration {
                             ).permitAll()
                             .requestMatchers(HttpMethod.POST, "/focus/iot/sensordata").permitAll()
 
-                            // � Todas as outras requisições exigem autenticação
                             .anyRequest().authenticated();
                 })
                 .exceptionHandling(exceptions -> exceptions
@@ -64,7 +62,7 @@ public class SecurityConfiguration {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.setContentType("application/json");
                             response.getWriter().write(new ObjectMapper().writeValueAsString(
-                                    Map.of("erro", "Acesso não autorizado. Por favor, realize o login.")
+                                    Map.of("erro", "Acesso não autorizado.")
                             ));
                         })
                 )
