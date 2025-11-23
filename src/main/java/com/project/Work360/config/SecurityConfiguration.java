@@ -56,7 +56,9 @@ public class SecurityConfiguration {
                                     "/swagger-ui/**",
                                     "/v3/api-docs/**"
                             ).permitAll()
-                            // 🔐 Todas as outras requisições exigem autenticação
+                            .requestMatchers(HttpMethod.POST, "/focus/iot/sensordata").permitAll()
+
+                            // � Todas as outras requisições exigem autenticação
                             .anyRequest().authenticated();
                 })
                 .exceptionHandling(exceptions -> exceptions

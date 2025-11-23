@@ -48,7 +48,6 @@ dependencies {
     implementation "org.springframework.ai:spring-ai-vector-store:1.0.0"
 
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'com.oracle.database.jdbc:ojdbc11'
 
     implementation 'com.google.code.gson:gson:2.13.2'
 
