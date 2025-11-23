@@ -22,7 +22,7 @@ A API é responsável por:
 3.  **Gustavo Ramires Lazzuri** - RM556772
 
 ---
-
+[Link da aplicação rodando na Azure](https://work360-app.azurewebsites.net/swagger-ui/index.html)
 ## ✨ Funcionalidades do Backend
 
 Esta API fornece os seguintes endpoints e funcionalidades para o cliente móvel:
